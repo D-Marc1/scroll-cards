@@ -54,16 +54,16 @@ const onInitialLoad = () => {
 onMounted(() => {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
+      // Get index of entry
       const index = [...entry.target.parentElement.children].indexOf(entry.target)
       
       if (entry.isIntersecting) {
         isInViewport.value[index] = true
-
-        console.log(entry)
       } else {
         isInViewport.value[index] = false
       }
 
+      // Set focus to first value on initial load
       if(!onInitialLoadCalled) {
         onInitialLoad()
 
