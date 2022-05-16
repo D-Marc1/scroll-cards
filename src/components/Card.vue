@@ -2,7 +2,7 @@
   <div
     class="card"
     :class="{ selected: isInFocus }"
-    :style="`height: ${height}px; line-height:${height}px;`"
+    :style="`height: ${height}px;`"
   >
     <slot />
   </div>
@@ -34,6 +34,9 @@ const height = (Math.random(Math.floor(Math.random() * 10)) + 1) * 100;
   text-align: center;
   margin-top: 10px;
   margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .selected {
   background-color: #afeeee;
