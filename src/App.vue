@@ -36,11 +36,11 @@ const setScrollDirection = () => {
 const isElInViewport = (element) => {
   const rect = element.getBoundingClientRect()
 
+  // Add threshold so text appears off screen
+  const threshold = 5
+
   return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    rect.top >= -threshold && rect.bottom - threshold <= window.innerHeight
   )
 }
 
