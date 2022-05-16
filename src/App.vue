@@ -16,8 +16,6 @@ const cards = Array.from(Array(100), (_,x) => `Card ${x+1}`);
 const isInViewport = ref([...Array(100)].fill(false))
 const isInFocus = ref([...Array(100)].fill(false))
 
-// const cardRefs = ref([])
-
 let direction = 'up'
 let prevYPosition = 0
 
