@@ -65,14 +65,14 @@ onMounted(() => {
       } else {
         isInViewport.value[index] = false
       }
-
-      // Set focus to first value on initial load
-      if(!onInitialLoadCalled) {
-        onInitialLoad()
-
-        onInitialLoadCalled = true
-      }
     })
+
+    // Set focus to first value on initial load
+    if(!onInitialLoadCalled) {
+      onInitialLoad()
+
+      onInitialLoadCalled = true
+    }
   })
 
   document.querySelectorAll('.cards').forEach((card) => {
