@@ -36,7 +36,7 @@ const setScrollDirection = () => {
     // Bottom-most element if scrolling up
     focusIndex = isInViewport.value.lastIndexOf(true)
   } else if (direction === 'down') {
-    // Top-most element if scrolling up
+    // Top-most element if scrolling down
     focusIndex = isInViewport.value.indexOf(true)
   }
 
