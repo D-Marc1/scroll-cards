@@ -23,8 +23,19 @@ let prevYPosition = 0
 
 let onInitialLoadCalled = false
 
+const setScrollDirection = () => {
+  if (window.scrollY > prevYPosition) {
+    direction = 'down'
+  } else {
+    direction = 'up'
+  }
+
+  prevYPosition = window.scrollY
+}
+
 const isElInViewport = (element) => {
-  const rect = element.getBoundingClientRect();
+  const rect = element.getBoundingClientRect()
+
   return (
       rect.top >= 0 &&
       rect.left >= 0 &&
@@ -54,27 +65,10 @@ const onInitialLoad = () => {
   isInFocus.value[focusIndex] = true
 }
 
-const setScrollDirection = () => {
-  // document.querySelectorAll('.cards').forEach((card, index) => {
-  //   const cardText = card.querySelector('.cards-text')
-
-  //   // Checking whether fully visible
-  //   if(isElInViewport(cardText)) {
-  //     isInViewport.value[index] = true
-  //   } else {
-  //     isInViewport.value[index] = false
-  //   }
-  // })
+const onScroll = () => {
+  setScrollDirection()
 
   setCardTextInViewport()
-
-  if (window.scrollY > prevYPosition) {
-    direction = 'down'
-  } else {
-    direction = 'up'
-  }
-
-  prevYPosition = window.scrollY
 
   let focusIndex = 0
 
@@ -99,41 +93,18 @@ onMounted(() => {
 
     onInitialLoadCalled = true
   }
-  // const observer = new IntersectionObserver((entries) => {
-  //   entries.forEach((entry) => {
-  //     // Get index of entry
-  //     const index = [...entry.target.parentElement.children].indexOf(entry.target)
-      
-  //     if (entry.isIntersecting) {
-  //       isInViewport.value[index] = true
-  //     } else {
-  //       isInViewport.value[index] = false
-  //     }
-  //   })
 
-  //   // Set focus to first value on initial load
-  //   if(!onInitialLoadCalled) {
-  //     onInitialLoad()
-
-  //     onInitialLoadCalled = true
-  //   }
-  // })
-
-  // document.querySelectorAll('.cards').forEach((card) => {
-  //   observer.observe(card)
-  // })
-
-  document.addEventListener('scroll', setScrollDirection)
+  document.addEventListener('scroll', onScroll)
 })
 
 onUnmounted(() => {
-  document.removeEventListener('scroll', setScrollDirection)
+  document.removeEventListener('scroll', onScroll)
 })
 </script>
 
 
 <style>
-.card-text {
+.cards-text {
   margin: 0px;
 }
 </style>
