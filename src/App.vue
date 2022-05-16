@@ -19,8 +19,6 @@ const isInFocus = ref([...Array(100)].fill(false))
 let direction = 'up'
 let prevYPosition = 0
 
-let onInitialLoadCalled = false
-
 const setScrollDirection = () => {
   if (window.scrollY > prevYPosition) {
     direction = 'down'
@@ -86,11 +84,7 @@ const onScroll = () => {
 
 onMounted(() => {
   // Set focus to first value on initial load
-  if(!onInitialLoadCalled) {
-    onInitialLoad()
-
-    onInitialLoadCalled = true
-  }
+   onInitialLoad()
 
   document.addEventListener('scroll', onScroll)
 })
