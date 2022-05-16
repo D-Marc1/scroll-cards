@@ -21,17 +21,53 @@ const isInFocus = ref([...Array(100)].fill(false))
 let direction = 'up'
 let prevYPosition = 0
 
+let onInitialLoadCalled = false
+
 const isElInViewport = (element) => {
   const rect = element.getBoundingClientRect();
   return (
-      rect.top >= -5 &&
+      rect.top >= 0 &&
       rect.left >= 0 &&
       rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
       rect.right <= (window.innerWidth || document.documentElement.clientWidth)
   )
 }
 
+const setCardTextInViewport = () => {
+  document.querySelectorAll('.cards').forEach((card, index) => {
+    const cardText = card.querySelector('.cards-text')
+
+    // Checking whether fully visible
+    if(isElInViewport(cardText)) {
+      isInViewport.value[index] = true
+    } else {
+      isInViewport.value[index] = false
+    }
+  })
+}
+
+const onInitialLoad = () => {
+  setCardTextInViewport()
+
+  let focusIndex = focusIndex = isInViewport.value.indexOf(true)
+
+  isInFocus.value[focusIndex] = true
+}
+
 const setScrollDirection = () => {
+  // document.querySelectorAll('.cards').forEach((card, index) => {
+  //   const cardText = card.querySelector('.cards-text')
+
+  //   // Checking whether fully visible
+  //   if(isElInViewport(cardText)) {
+  //     isInViewport.value[index] = true
+  //   } else {
+  //     isInViewport.value[index] = false
+  //   }
+  // })
+
+  setCardTextInViewport()
+
   if (window.scrollY > prevYPosition) {
     direction = 'down'
   } else {
@@ -45,17 +81,9 @@ const setScrollDirection = () => {
   if (direction === 'up') {
     // Bottom-most element if scrolling up
     focusIndex = isInViewport.value.lastIndexOf(true)
-
-    if(!isElInViewport(document.querySelectorAll('.cards-text')[focusIndex])) {
-      focusIndex = focusIndex - 1
-    }
   } else if (direction === 'down') {
     // Top-most element if scrolling down
     focusIndex = isInViewport.value.indexOf(true)
-
-    if(!isElInViewport(document.querySelectorAll('.cards-text')[focusIndex])) {
-      focusIndex = focusIndex + 1
-    }
   }
 
   // Reset array
@@ -64,38 +92,36 @@ const setScrollDirection = () => {
   isInFocus.value[focusIndex] = true
 }
 
-let onInitialLoadCalled = false
-
-const onInitialLoad = () => {
-  let focusIndex = focusIndex = isInViewport.value.indexOf(true)
-
-  isInFocus.value[focusIndex] = true
-}
-
 onMounted(() => {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      // Get index of entry
-      const index = [...entry.target.parentElement.children].indexOf(entry.target)
+  // Set focus to first value on initial load
+  if(!onInitialLoadCalled) {
+    onInitialLoad()
+
+    onInitialLoadCalled = true
+  }
+  // const observer = new IntersectionObserver((entries) => {
+  //   entries.forEach((entry) => {
+  //     // Get index of entry
+  //     const index = [...entry.target.parentElement.children].indexOf(entry.target)
       
-      if (entry.isIntersecting) {
-        isInViewport.value[index] = true
-      } else {
-        isInViewport.value[index] = false
-      }
-    })
+  //     if (entry.isIntersecting) {
+  //       isInViewport.value[index] = true
+  //     } else {
+  //       isInViewport.value[index] = false
+  //     }
+  //   })
 
-    // Set focus to first value on initial load
-    if(!onInitialLoadCalled) {
-      onInitialLoad()
+  //   // Set focus to first value on initial load
+  //   if(!onInitialLoadCalled) {
+  //     onInitialLoad()
 
-      onInitialLoadCalled = true
-    }
-  })
+  //     onInitialLoadCalled = true
+  //   }
+  // })
 
-  document.querySelectorAll('.cards').forEach((card) => {
-    observer.observe(card)
-  })
+  // document.querySelectorAll('.cards').forEach((card) => {
+  //   observer.observe(card)
+  // })
 
   document.addEventListener('scroll', setScrollDirection)
 })
